@@ -3,7 +3,7 @@ fprintf('Starting offline construction of connectivity profile... [%s]\n\n',getT
 
 %% set connectivity parameters
 sConnParams = struct;
-sConnParams.intCellsV1 = 3600;
+sConnParams.intCellsV1 = 1200;
 sConnParams.vecSizeInput = [32 32];
 sConnParams.dblVisSpacing = 6.4/sConnParams.vecSizeInput(1);
 
@@ -74,7 +74,7 @@ sConnParams.dblDelaySDV1ToV2 = 1/1000; %in ms
 
 %% build connectivity
 sConnectivity = buildConnectivitySimilBased(sConnParams);
-return
+
 %% save
 if sConnParams.boolUseRFs && sConnParams.boolUseSFs && ~sConnParams.boolUseWeights
 	strConnFile = sprintf('sConnSimil2_Ret%dCol%dN%dS%d_%s.mat',...

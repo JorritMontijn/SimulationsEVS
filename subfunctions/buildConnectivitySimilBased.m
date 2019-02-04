@@ -7,7 +7,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 	boolUseRFs = sConnParams.boolUseRFs;
 
 	%% msg
-	printf('Starting creation of connectivity structure [%s]\n',getTime);
+	fprintf('Starting creation of connectivity structure [%s]\n',getTime);
 	
 	%% extract data
 	intImX = sConnParams.vecSizeInput(1);
@@ -198,7 +198,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 		vecSynDelayOFF_to_Cort(vecConnsAssignOFF) = max(0,gaussrnd(vecMeanSynDelayFromLGN_ToCort(intCellType),vecSDSynDelayFromLGN_ToCort(intCellType),size(vecConnsAssignOFF)));
 		
 	end
-	printf(' .. Created LGN to V1 connectivity; %d active OFF field synapses, and %d active ON field synapses [%s]\n',intConnsLGN_to_CortOFF,intConnsLGN_to_CortON,getTime);
+	fprintf(' .. Created LGN to V1 connectivity; %d active OFF field synapses, and %d active ON field synapses [%s]\n',intConnsLGN_to_CortOFF,intConnsLGN_to_CortON,getTime);
 	
 	%% define LIF model parameters
 	%% neuron parameters
@@ -265,10 +265,10 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 	dblDelaySDCortToCort = sConnParams.dblDelaySDCortToCort; %in ms
 	
 	%msg
-	printf(' .. Created LIF model parameters [%s]\n',getTime);
+	fprintf(' .. Created LIF model parameters [%s]\n',getTime);
 	
 	%% calculate similarity between receptive fields of V1 cells
-	printf(' .. Building V1 field similarities for %dx%d cells... [%s]\n',intCellsV1,intCellsV1,getTime);
+	fprintf(' .. Building V1 field similarities for %dx%d cells... [%s]\n',intCellsV1,intCellsV1,getTime);
 	matTuningSimilarity=nan(intCellsV1,intCellsV1);
 	parfor i1=1:intCellsV1
 		a = matPrefGabors(:,:,i1);
@@ -285,7 +285,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 	%% create cortical connectivity and parameter vectors
 	%locality of connection probability between cells for different types
 	vecLocalityLambda = sConnParams.vecLocalityLambda;
-	printf(' .. Building V1 connectivity; locality parameters are: [%s\b] [%s]\n',sprintf('%.2f ',vecLocalityLambda),getTime);
+	fprintf(' .. Building V1 connectivity; locality parameters are: [%s\b] [%s]\n',sprintf('%.2f ',vecLocalityLambda),getTime);
 	
 	%pre-allocate cortical synaptic connection matrix
 	vecTotalConnectionsPerType = sum(matConnCortFromTo,1);
@@ -400,7 +400,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 			vecSynV1Type(vecConnsAssign) = 1; %1; intra-areal, 2 inter-areal
 		end
 	end
-	printf(' .. Created V1 connectivity; %d active corticocortical synapses between %d cells [%s]\n',intTotalV1Connections,intCellsV1,getTime);
+	fprintf(' .. Created V1 connectivity; %d active corticocortical synapses between %d cells [%s]\n',intTotalV1Connections,intCellsV1,getTime);
 	
 	%% build V1-V2 connectivity
 	%set parameters for V2
@@ -426,7 +426,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 		
 		
 		%% create RF exemplars for V2 cells
-		printf(' .. Building V2 exemplar fields for %d cells... [%s]\n',intCellsV2,getTime);
+		fprintf(' .. Building V2 exemplar fields for %d cells... [%s]\n',intCellsV2,getTime);
 		%transform r
 		matTotalSim = matTuningSimilarity;
 		matTotalSim = abs(tril(matTotalSim,-1));
@@ -463,7 +463,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 		vecPrefRF_Y_V2 = dblVisSpacing*(vecPrefRF_Y_V2 - intImY/2);
 		
 		%% build similarity of V1 fields to V2 exemplars
-		printf(' .. Calculating similarity of V1 Gabors to V2 exemplars... [%s]\n',getTime);
+		fprintf(' .. Calculating similarity of V1 Gabors to V2 exemplars... [%s]\n',getTime);
 		matSimilarityGaborExemplar = nan(intCellsV1,intCellsV2);
 		parfor intCellV1=1:intCellsV1
 			a = matPrefGabors(:,:,intCellV1);
@@ -476,7 +476,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 			end
 		end
 		%msg
-		printf(' .. Created V2 fields, building V1 => V2 connectivity... [%s]\n',getTime);
+		fprintf(' .. Created V2 fields, building V1 => V2 connectivity... [%s]\n',getTime);
 		
 		
 		%% build preferred RF location for interneurons
@@ -621,7 +621,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 	drawnow;pause;
 			%}
 		end
-		printf(' .. Created V1 => V2 connectivity; %d active inter-areal synapses from %d V1 to %d V2 cells [%s]\n',intTotalV1V2Connections,intCellsV1,intCellsV2,getTime);
+		fprintf(' .. Created V1 => V2 connectivity; %d active inter-areal synapses from %d V1 to %d V2 cells [%s]\n',intTotalV1V2Connections,intCellsV1,intCellsV2,getTime);
 		
 		%% build RF similarities V2
 		vecPrefRF_X_V2 = nan(1,intCellsV2);
@@ -648,7 +648,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 		matSimilarityFieldsV2(diag(diag(true(size(matSimilarityFieldsV2))))) = 0;
 		
 		%msg
-		printf(' .. Created V2 field similarities, building V2 => V2 connectivity... [%s]\n',getTime);
+		fprintf(' .. Created V2 field similarities, building V2 => V2 connectivity... [%s]\n',getTime);
 		
 		
 		%% V2 => V2
@@ -733,11 +733,11 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 				vecSynV2Type(vecConnsAssign) = 1; %1; intra-areal, 2 inter-areal
 			end
 		end
-		printf(' .. Created V2 connectivity; %d active corticocortical synapses between %d cells [%s]\n',intTotalV2Connections,intCellsV2,getTime);
+		fprintf(' .. Created V2 connectivity; %d active corticocortical synapses between %d cells [%s]\n',intTotalV2Connections,intCellsV2,getTime);
 		
 		%% V2 => V1
 		if isfield(sConnParams,'matConnsPerTypeV2V1')
-			printf(' .. Building V2=>V1 feedback connections... [%s]\n',getTime);
+			fprintf(' .. Building V2=>V1 feedback connections... [%s]\n',getTime);
 			
 			%connection parameters
 			dblSpatialDropoffV2V1 = sConnParams.dblSpatialDropoffV2V1; %normpdf(vecX,0,0.8); zandvakili&kohn, 2015
@@ -811,7 +811,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 			end
 			
 			%msg
-			printf(' .. Created feedback connectivity; %d active corticocortical synapses from %d V2 to %d V1 cells [%s]\n',intTotalV2V1Connections,intCellsV2,intCellsV1,getTime);
+			fprintf(' .. Created feedback connectivity; %d active corticocortical synapses from %d V2 to %d V1 cells [%s]\n',intTotalV2V1Connections,intCellsV2,intCellsV1,getTime);
 			
 		else
 			%build dummies
