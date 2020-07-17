@@ -1,4 +1,4 @@
-function sConnectivity = buildConnectivitySimilBased(sConnParams)
+function sConnectivity = buildConnectivity(sConnParams)
 	%UNTITLED Summary of this function goes here
 	%   Detailed explanation goes here
 	
@@ -85,9 +85,11 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 	vecSynConductanceOFF_to_Cort = nan(intConnsLGN_to_CortOFF,1);
 	vecSynDelayOFF_to_Cort = nan(intConnsLGN_to_CortOFF,1);
 	
+	%% loop
 	intC_ON = 1;
 	intC_OFF = 1;
 	for intNeuron=1:intCellsV1
+		intNeuron
 		%get cell parameters
 		dblPsi = vecPrefPsiV1(intNeuron); %cell's phase offset
 		dblThetaRot=vecPrefOriV1(intNeuron); %cell's preferred orientation
@@ -106,17 +108,28 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 		intC_OFF = intC_OFF + intConnsOFF;
 		
 		%% create Gabor
+		%for dblPrefSF=[0.5 1 2 4 8]
+		%	for dblPsi=[pi*(0:0.1:2)]
 		% get rotation matrices
 		dblTheta=dblThetaRot;
-		matX_theta=(matMeshX*cos(dblTheta)+matMeshY*sin(dblTheta))+dblPrefRF_X;
-		matY_theta=(-matMeshX*sin(dblTheta)+matMeshY*cos(dblTheta))+dblPrefRF_Y;
+		%matX_theta=(matMeshX*cos(dblTheta)+matMeshY*sin(dblTheta))+dblPrefRF_X;
+		%matY_theta=(-matMeshX*sin(dblTheta)+matMeshY*cos(dblTheta))+dblPrefRF_Y;
 		
 		%get gabor
-		matG_rot = exp(-.5*(matX_theta.^2/dblSigmaX^2+matY_theta.^2/dblSigmaY^2)).*cos(2*pi*dblPrefSF*matX_theta+dblPsi);
+		%matG_rot = exp(-.5*(((matX_theta.^2)/(dblSigmaX^2))+((matY_theta.^2)/(dblSigmaY^2)))).*cos(2*pi*dblPrefSF*matX_theta+dblPsi);
 		%matG_rot = imrotate(matG,rad2ang(dblThetaRot),'bilinear','crop');
-		
-		
-		
+		matG_rot = exp((-0.5*(((matMeshX - dblPrefRF_X).^2)/(dblSigmaX^2) + ((matMeshY - dblPrefRF_Y).^2)/(dblSigmaY^2)))).*...
+			cos(2*pi*dblPrefSF*((matMeshX - dblPrefRF_X)*cos(dblTheta)+(matMeshY - dblPrefRF_Y)*sin(dblTheta)+dblPsi));
+		if rand(1) < -0.01
+		figure,imagesc(matG_rot)
+		title(sprintf('Ori %.1f, SF %.1f, Phase %.3f',dblTheta,dblPrefSF,dblPsi));
+		colorbar;
+		drawnow;
+		export_fig(sprintf('ExampleN%dOri%.1fSF%.1fPhase%.1f.tif',intNeuron,dblTheta,dblPrefSF,dblPsi));
+		end
+		%	end
+		%end
+		%return
 		matPrefGabors(:,:,intNeuron) = matG_rot;
 		
 		%get connection probabilities
@@ -360,7 +373,10 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 				intLoopTracker = intLoopTracker + 1;
 			end
 			if numel(vecConns) < intChooseSimN
-				error
+				vecConnProb2 = vecConnProb(:)';
+				vecConnProb2(vecConns) = 0;
+				[vecSortedConns,vecReorder] = sort(vecConnProb2,'descend');
+				vecConns = unique([vecConns vecReorder(1:(intChooseSimN - numel(vecConns)))]);
 			end
 			if numel(vecConns) > intChooseSimN
 				vecConns = vecConns(randperm(numel(vecConns),intChooseSimN));
@@ -408,6 +424,7 @@ function sConnectivity = buildConnectivitySimilBased(sConnParams)
 	dblSpatialDropoffV1V2 = sConnParams.dblSpatialDropoffV1V2; %gausspdf(vecX,0,0.8); zandvakili&kohn, 2015
 	dblSpatialDropoffInterneuronsV2 = sConnParams.dblSpatialDropoffInterneuronsV2; %for interneurons
 	intCellsV2 = sConnParams.intCellsV2;
+	matExemplarFieldsV2 = [];
 	if intCellsV2>0
 		%create cell-based parameters
 		vecDefinitionV2CellTypes = sConnParams.vecDefinitionV2CellTypes;

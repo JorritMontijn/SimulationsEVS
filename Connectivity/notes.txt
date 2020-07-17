@@ -1,0 +1,9 @@
+module load foss/2016a matlab/2016b
+mcc -m -v -R '-nojvm, -nodisplay' -o SimCompiled runSimulation.m -I /home/users/m/montijn/Code/ -I /home/users/m/montijn/Code/subfunctions/ -I /home/users/m/montijn/Code/general/ -I /home/users/m/montijn/Code/general/classics/
+
+
+for i in {1..100}
+do
+    sbatch runIndepRetOri5Noise0.8.slurm $i
+done
+

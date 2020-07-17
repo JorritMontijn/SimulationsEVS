@@ -4,6 +4,7 @@ function sData = getDynSimPrep(sParams,dblMaxRunningTime,intWorker)
 hTic = tic;
 sStimParams = sParams.sStimParams;
 sStimInputs = sParams.sStimInputs;
+boolIndRet = sParams.boolIndRet;
 
 %% build connectivity
 sData = sParams.sConnectivity;
@@ -11,8 +12,8 @@ sData = sParams.sConnectivity;
 %% prepare variables for simulation
 % run stitched together trials
 intCortexCells = sData.intCortexCells;
-vecThisV = gaussrnd(-55.6,1,[intCortexCells,1]);
-
+vecThisV = randn([intCortexCells,1]) -55.6;
+	
 intLGN_CellsPerStream = size(sStimInputs.cellLGN_ON{1},1)*size(sStimInputs.cellLGN_ON{1},2);
 cellSpikeTimesLGN_ON = cell(intLGN_CellsPerStream,1);
 cellSpikeTimesLGN_OFF = cell(intLGN_CellsPerStream,1);
@@ -79,7 +80,11 @@ end
 
 %% run simulation
 if ~isa(dblMaxRunningTime,'uint64'),dblMaxRunningTime=dblMaxRunningTime-toc(hTic);end
-sData = getDynSimRun(sData,dblMaxRunningTime,intWorker);
+if boolIndRet
+	sData = getDynSimRunIndInp(sData,dblMaxRunningTime,intWorker);
+else
+	sData = getDynSimRun(sData,dblMaxRunningTime,intWorker);
+end
 
 %% remove placeholder spike entries
 cellSpikeTimesTemp = sData.cellSpikeTimesCortex;

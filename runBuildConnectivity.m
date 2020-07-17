@@ -18,7 +18,7 @@ fprintf('Starting offline construction of connectivity profile... [%s]\n\n',getT
 %% set connectivity parameters
 sConnParams = struct;
 sConnParams.intCellsV1 = 1200;
-sConnParams.vecSizeInput = [32 32];
+sConnParams.vecSizeInput = [256 256];
 sConnParams.dblVisSpacing = 6.4/sConnParams.vecSizeInput(1);
 
 % set connectivity parameters; synaptic weights/RF location variation
@@ -27,20 +27,21 @@ sConnParams.boolUseRFs = true;
 sConnParams.boolUseSFs = true;
 
 %connection definition LGN
-sConnParams.vecConnsPerTypeON = 2*[36 24]; %[pyramid interneuron]
-sConnParams.vecConnsPerTypeOFF = 2*[36 24]; %[pyramid interneuron]
+sConnParams.vecConnsPerTypeON = 64*2*[36 24]; %[pyramid interneuron]
+sConnParams.vecConnsPerTypeOFF = 64*2*[36 24]; %[pyramid interneuron]
 
-sConnParams.dblSigmaX = 0.7; %length of gabor response
-sConnParams.dblSigmaY = 0.7; %width of gabor response
-sConnParams.vecConductance_FromLGN_ToCort = [1.1 1.2]*0.24; %to [pyramid interneuron]
+sConnParams.dblSigmaX = 1.29; %length of gabor response
+sConnParams.dblSigmaY = 1.29; %width of gabor response
+dblScaleCorrection = 0.96;
+sConnParams.vecConductance_FromLGN_ToCort = (1/(64*dblScaleCorrection))*[1.1 1.2]*0.24; %to [pyramid interneuron]
 sConnParams.vecMeanSynDelayFromLGN_ToCort = [10 5]/1000; %to [pyramid interneuron]
 sConnParams.vecSDSynDelayFromLGN_ToCort = [7 3]/1000; %to [pyramid interneuron]
 
 %V1 def
 if sConnParams.boolUseSFs
-	sConnParams.vecDefinitionV1SpatFreq = 2.^[-3 -2 -1 0];%2.^[-3:1:1];
+	sConnParams.vecDefinitionV1SpatFreq = 8*2.^[-4 -3 -2 -1 0];%2.^[-3:1:1];
 else
-	sConnParams.vecDefinitionV1SpatFreq = 2.^[-2];%2.^[-3:1:1];
+	sConnParams.vecDefinitionV1SpatFreq = 8*2.^[-2];%2.^[-3:1:1];
 end
 sConnParams.vecDefinitionV1CellTypes = [1 1 1 1 2]; %[1=pyramid 2=interneuron]
 sConnParams.intColumns = sConnParams.intCellsV1 / (numel(sConnParams.vecDefinitionV1SpatFreq) * numel(sConnParams.vecDefinitionV1CellTypes)); %48 / 252 / 120 / 600
@@ -68,7 +69,7 @@ sConnParams.vecLocalityLambda = [0 -0.5]; %[pyramid interneuron]
 %V2 params
 sConnParams.dblSpatialDropoffV1V2 = 0.8; %normpdf(vecX,0,0.8); zandvakili&kohn, 2015
 sConnParams.dblSpatialDropoffInterneuronsV2 = 3; %for interneurons
-sConnParams.intCellsV2 = 1200;%sConnParams.intCellsV1;%round(sConnParams.intCellsV1/2);
+sConnParams.intCellsV2 = 0;%sConnParams.intCellsV1;%round(sConnParams.intCellsV1/2);
 
 %create cell-based parameters
 sConnParams.vecDefinitionV2CellTypes = [1 1 1 1 2];
@@ -100,9 +101,9 @@ else
 		sConnParams.intColumns,sConnectivity.intCortexCells,numel(sConnectivity.vecSynExcInh),...
 		sConnParams.boolUseWeights,sConnParams.boolUseRFs,sConnParams.boolUseSFs,getDate);
 end
-strConnDir = 'D:\Simulations\Connectivity\';
+strConnDir = 'F:\Code\Simulations\SimulationsEVS\Connectivity\';
 
 fprintf('Saving file [%s] to [%s]... [%s]\n',strConnFile,strConnDir,getTime);
 save([strConnDir strConnFile],'sConnParams','sConnectivity');
-
+fprintf('Done! [%s]\n',getTime);
 

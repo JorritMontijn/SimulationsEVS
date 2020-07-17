@@ -1,8 +1,8 @@
-%runSimulation	Starts the actual simulation with shared retinal input 
-%				to all simulated cells. Use runSimulationIndInp for
-%				independent retinal input, but slower performance.
+%runSimulationIndInp	Starts the actual simulation with independent retinal
+%						input to remove shared fluctions. Use runSimulation() 
+%						for shared input noise and faster performance.
 %
-%	[sData,sSimRun] = runSimulation(strInput)
+%	[sData,sSimRun] = runSimulationIndInp(strInput)
 %
 %This function uses string-based inputs with parameter delimited by commas
 %so compiled versions can also be started from the command line. The
@@ -15,7 +15,7 @@
 %noticeably slow down the simulation speed. 
 %
 %Input syntax is a comma-delimited string of: [parameter=value,]
-%Example: runSimulation time=0-12:00:00,conn=Connectivity.mat,... etc
+%Example: runSimulationIndInp time=0-12:00:00,conn=Connectivity.mat,... etc
 %
 %Inputs are 
 %<parameter> (required/optional) [Value-syntax]	Description
@@ -32,6 +32,7 @@
 %- tag		(opt)	[string]		Identification string to attach to
 %									output so you can recognize the sim run
 %- pixnoise	(opt)	[float]			Scalar to corrupt input with white noise
+%- indret	(opt)	[integer]		Use independent retinas (1) or not (0)?
 %
 %NOTE: the function uses ispc() to check if the function is being run on a
 %PC, and if so, it creates a larger "Master" file with all properties.
@@ -40,8 +41,11 @@
 %
 %Version History:
 %2019-02-12 Updated name and help description [by Jorrit Montijn]
+%2020-07-06 Merged independent retinas into single executable [by JM]
 
 function [sData,sSimRun] = runSimulation(strInput)
+	%strInput = 'indret=0,time=1,conn=sConnSimil2_Ret32Col180N4800S1397760_2018-04-09.mat,stim=sStim2_SquareGratingExpRet32Noise0Ori5Drift2_x2R1_2018-07-16.mat,idx=1,att=0_2,tag=C2IndepRetOri2Noise0';
+	
 	hTic = tic;
 	%% split input
 	cellIn = strsplit(strInput,',');
@@ -55,6 +59,7 @@ function [sData,sSimRun] = runSimulation(strInput)
 	strTag='';
 	dblPixNoise=0;
 	intAttArea=0;
+	boolIndRet = 0;
 	
 	%% parse
 	for intInput=1:numel(cellIn)
@@ -69,6 +74,8 @@ function [sData,sSimRun] = runSimulation(strInput)
 			strConnFile = strValue;
 		elseif strcmpi(strParam,'stim') %required
 			strStimFile = strValue;
+		elseif strcmpi(strParam,'indret') %optional
+			boolIndRet = str2double(strValue);
 		elseif strcmpi(strParam,'idx') %optional
 			intWorker = str2double(strValue);
 		elseif strcmpi(strParam,'att') %optional
@@ -95,15 +102,18 @@ function [sData,sSimRun] = runSimulation(strInput)
 	if ispc
 		%add directories to paths
 		strHome = mfilename('fullpath');
-		if isempty(strHome),strHome='D:\Simulations\';end
-		strHome = strHome(1:(end-length(mfilename)));
+		if isempty(strHome) || strcmp(strHome(1),'C')
+			strHome='F:\Code\Simulations\SimulationsEVS\';
+		else
+			strHome = strHome(1:(end-length(mfilename)));
+		end
 		strLogDir = [strHome 'logs' filesep];
-		strOutputDir = ['A:\SimResults' filesep];
+		strOutputDir = ['F:\Data\Results\SimResults' filesep];
 		strStimDir = [strHome 'Stimulation' filesep];
 		strConnDir = [strHome 'Connectivity' filesep];
 	else
 		%add directories to paths
-		strHome = [filesep 'home' filesep 'montijn' filesep];
+		strHome = [filesep 'home' filesep 'users' filesep 'm' filesep 'montijn' filesep 'SimulationsEVS' filesep];
 		strLogDir = [strHome 'logs' filesep];
 		strOutputDir = [strHome 'SimResults' filesep];
 		strStimDir = [strHome 'Stimulation' filesep];
@@ -144,6 +154,7 @@ function [sData,sSimRun] = runSimulation(strInput)
 	sParams.dblAttention = dblAttention;
 	sParams.intAttArea = intAttArea;
 	sParams.dblPixNoise = dblPixNoise;
+	sParams.boolIndRet = boolIndRet;
 	
 	%% load stimulus list
 	[sStimParams,sStimInputs] = loadStimulation(strStimDir,strStimFile);

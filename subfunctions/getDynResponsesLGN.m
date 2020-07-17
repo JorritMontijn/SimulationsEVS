@@ -31,7 +31,8 @@ function [matLGN_ON,matLGN_OFF,varDeltaSyn] = getDynResponsesLGN(matR_ON,matR_OF
 	end
 	if ~exist('varDeltaSyn','var')
 		%create matrix with random delays
-		varDeltaSyn = gaussrnd(vecDeltaSynP(1),vecDeltaSynP(2),[vecSize(1:2) 2]);
+		varDeltaSyn = normrnd(vecDeltaSynP(1),vecDeltaSynP(2),[vecSize(1:2) 2]);
+		
 		%remove negative delays
 		varDeltaSyn(varDeltaSyn<0) = -varDeltaSyn(varDeltaSyn<0);
 	end

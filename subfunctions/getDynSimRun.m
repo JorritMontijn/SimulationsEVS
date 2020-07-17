@@ -338,7 +338,9 @@ function sData = getDynSimRun(sData,dblMaxRunningTime,intWorker)
 					dblMaxRunningTime-toc(hTic),getTime);
 		
 				%get stim drive
-				sStimDrive = getDynBottomUpInputs(sSP);
+				intStimType=[];
+				if strcmpi(sSP.strStimType,'SquareGrating'),intStimType=0;end
+				sStimDrive = getDynBottomUpInputs(sSP,intStimType);
 				
 				%assign
 				matLGN_ON = sStimDrive.matLGN_ON;

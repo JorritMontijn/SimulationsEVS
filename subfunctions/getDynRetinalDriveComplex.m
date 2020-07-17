@@ -23,6 +23,7 @@ function [matR_ON,matR_OFF,dblVisSpacingImage,vecLuminance] = getDynRetinalDrive
 	%dblTauSurround = 20;			%same as above, for center-field
 	%dblR_baseline = 15;			%baseline spiking rate in Hz
 	
+	%% run
 	%get default values
 	if ~exist('sP','var'),sP=struct;end
 	if ~isfield(sP,'dblContrast'),dblContrast = 100;else dblContrast=sP.dblContrast;end
@@ -94,10 +95,10 @@ function [matR_ON,matR_OFF,dblVisSpacingImage,vecLuminance] = getDynRetinalDrive
 	%matRetinalInput = matRetinalInput + 0.5;
 	
 	%select only required pixels
-	vecSelectX = (find(vecSpaceX >= dblVisSpacingCells*((-(vecArraySize(1) - 1)/2)),1) : find(vecSpaceX >= dblVisSpacingCells*(((vecArraySize(1) - 1)/2)),1))-1;
-	vecSelectY = (find(vecSpaceX >= dblVisSpacingCells*((-(vecArraySize(2) - 1)/2)),1) : find(vecSpaceX >= dblVisSpacingCells*(((vecArraySize(2) - 1)/2)),1))-1;
-	matR_center = matR_center(vecSelectX,vecSelectY,:);
-	matR_surround = matR_surround(vecSelectX,vecSelectY,:);
+	vecSelectX = (find(vecSpaceX >= dblVisSpacingCells*((-(vecArraySize(1) - 1)/2)),1) : find(vecSpaceX >= dblVisSpacingCells*(((vecArraySize(1) - 1)/2)),1));
+	vecSelectY = (find(vecSpaceX >= dblVisSpacingCells*((-(vecArraySize(2) - 1)/2)),1) : find(vecSpaceX >= dblVisSpacingCells*(((vecArraySize(2) - 1)/2)),1));
+	matR_center = matR_center(vecSelectX,vecSelectY,:); %start contrast-dependent response around 1% instead of 10%, 2019-7-17
+	matR_surround = matR_surround(vecSelectX,vecSelectY,:); %start contrast-dependent response around 1% instead of 10%, 2019-7-17
 	
 	%shift surround by dblDelayCS
 	intShiftTau = round(dblDelayCS/dblStepT);
@@ -106,18 +107,9 @@ function [matR_ON,matR_OFF,dblVisSpacingImage,vecLuminance] = getDynRetinalDrive
 	%calculate overall response
 	matR_ON = max(0,dblR_baseline + matR_center - matR_surround);
 	matR_OFF = max(0,dblR_baseline - matR_center + matR_surround);
-	dblBeta = 3;
 	
-	%contrast dependency
-	%{
-	vecContrast = zeros(1,1,intMaxT);
-	parfor intT=1:intMaxT
-		mTemp = matR_ON(:,:,intT);
-		vecContrast(intT) = range(mTemp(:));
-	end
-	vecContrast=(vecContrast./max(vecContrast(:)))*dblContrast;
-	vecContrast=dblBeta * max(0,log10(vecContrast));
-	%}
+	%luminance offset
+	dblBeta = 3;
 	vecLuminance = dblBeta * max(0,log10(dblLuminance));
 	matR_ON = bsxfun(@mtimes,matR_ON,vecLuminance);
 	matR_OFF = bsxfun(@mtimes,matR_OFF,vecLuminance);

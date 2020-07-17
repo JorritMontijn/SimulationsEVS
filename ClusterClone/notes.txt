@@ -1,9 +1,0 @@
-module load foss/2016a matlab/2016b
-mcc -m -v -R '-nojvm, -nodisplay' -o DynSimCompiledIndInp runDynSimCompiledIndInp.m -I /home/montijn/Code/ -I /home/montijn/Code/general/ -I /home/montijn/Code/general/classics/
-
-
-for i in {1..100}
-do
-    sbatch runIndepRetV1V2Ori5Noise5.slurm $i
-done
-
