@@ -15,6 +15,9 @@
 %% msg
 clearvars;
 fprintf('Starting offline construction of stimulus profile... [%s]\n\n',getTime);
+%dblNoise = 0;
+vecNoise = 0:0.2:3;
+for dblNoise=vecNoise
 
 %% prepare stimulus list
 boolSmallRet = false;
@@ -27,7 +30,7 @@ sStimParams.dblPreStimBlankDur = 0.1;%0.25
 sStimParams.dblStimDur = 200/1000;%0.5
 sStimParams.dblPostStimBlankDur = 0.1;%0.25
 sStimParams.vecOrientations = [42.5 47.5];%[0:20:359];%[44 46 44 44 46]; %[44 46];%[0:(180/8):179];%[44 46 44 44 46];
-sStimParams.vecOrientationNoise = 0.2*ones(size(sStimParams.vecOrientations));%[5 0 0 0];%[0 5 0 0 5];
+sStimParams.vecOrientationNoise = dblNoise*ones(size(sStimParams.vecOrientations));%[5 0 0 0];%[0 5 0 0 5];
 sStimParams.vecSpatialFrequencies = 2;%[0.25 0.25 0.2 0.25 0.2];%[0.25 0.25 0.2 0.25 0.2];%2.^[-4:1];
 sStimParams.vecSpatialFrequencyNoise = 0;%0.05*ones(size(sStimParams.vecSpatialFrequencies));%[0.05 0 0 0];%[0 0 0.1 0 0.1];
 sStimParams.vecTemporalFrequencies = 5;%[2 2 2 2.5 2.5];%[2 2 2 2.5 2.5];
@@ -50,10 +53,14 @@ sStimParams.boolUseAllCombs = true;%false
 %% build stimuli
 [sStimParams,sStimInputs] = loadDynSimStim(sStimParams);
 sStimInputs.vecStimTypeAttention = zeros(size(sStimInputs.vecTrialStimType));
-sStimParams.strStimTag= sprintf('Ret%dNoise%sOri%d',...
+sStimParams.strStimTag= sprintf('Ret%dNoise%.1fOri%d',...
 	sStimParams.vecScrPixWidthHeight(1),...
-	num2str(sStimParams.vecOrientationNoise(1)),...'All',...
+	sStimParams.vecOrientationNoise(1),...'All',...
 	range(sStimParams.vecOrientations));
+sStimInputs.cellR_ON = [];
+sStimInputs.cellR_OFF = [];
+sStimInputs.cellLGN_ON = [];
+sStimInputs.cellLGN_OFF = [];
 
 %% build stimuli v2
 %{
@@ -109,3 +116,4 @@ strStimDir = 'F:\Code\Simulations\SimulationsEVS\Stimulation\';
 
 fprintf('Saving file [%s] to [%s]... [%s]\n',strStimFile,strStimDir,getTime);
 save([strStimDir strStimFile],'sStimParams','sStimInputs');
+end

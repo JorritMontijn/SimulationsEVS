@@ -1,12 +1,12 @@
-strConnOld = 'sConnSimil2_Ret32Col60N1200S336000_2018-07-19.mat'; %old
-strConnNew = 'sConnSimil2_Ret256Col48N1200S336000_2020-07-16.mat'; %new
-strStimOld = 'sStim2_SquareGratingExpRet32Noise2Ori5Drift2_x2R1_2018-08-08.mat'; %old
-strStimNew = 'sStim2_SquareGratingExpRet256Noise5Ori5Drift2_x2R1_2020-07-09.mat'; %new
+clear all;close all;clc;
+strConnNew = 'Conn256N1200_2020-07-16.mat'; %new
+dblNoise = 0;
+strStimNew = sprintf('Ret256Noise%.1fOri5_x2R1_2020-07-17.mat',dblNoise); %new
 
 
-strInput = ['time=1,conn=' strConnNew...
+strInput = ['time=0,conn=' strConnNew...
 	',stim=' strStimNew...
-	',idx=1,tag=Ori2Noise5'];
+	',idx=0,tag=Ori2Noise' num2str(dblNoise)];
 [sData,sSimRun]=runSimulation(strInput);
 
 %{

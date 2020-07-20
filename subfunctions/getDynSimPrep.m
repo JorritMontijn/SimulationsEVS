@@ -14,7 +14,7 @@ sData = sParams.sConnectivity;
 intCortexCells = sData.intCortexCells;
 vecThisV = randn([intCortexCells,1]) -55.6;
 	
-intLGN_CellsPerStream = size(sStimInputs.cellLGN_ON{1},1)*size(sStimInputs.cellLGN_ON{1},2);
+intLGN_CellsPerStream = size(sStimInputs.matBlankLGN_ON,1)*size(sStimInputs.matBlankLGN_ON,2);
 cellSpikeTimesLGN_ON = cell(intLGN_CellsPerStream,1);
 cellSpikeTimesLGN_OFF = cell(intLGN_CellsPerStream,1);
 cellSpikeTimesCortex = cell(intCortexCells,1);

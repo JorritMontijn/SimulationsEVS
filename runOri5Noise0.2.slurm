@@ -1,14 +1,16 @@
 #!/bin/sh
 
 #SBATCH --job-name="Ori5Noise02"
-#SBATCH --partition=mono-shared
+#SBATCH --partition=mono-shared-EL7
 #SBATCH --time=0-12:00:00
 #SBATCH --cpus-per-task=1
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=4000
+#SBATCH --mem-per-cpu=10000
+#SBATCH --mail-user=Jorrit.Montijn@unige.ch
+#SBATCH --mail-type=FAIL
+#SBATCH --output=/home/users/m/montijn/SimulationsEVS/Ori5Noise02.out
+#SBATCH --error=/home/users/m/montijn/SimulationsEVS/Ori5Noise02.err
 
-#SBATCH --output=/home/montijn/Ori5Noise02.out
-#SBATCH --error=/home/montijn/Ori5Noise02.err
 
 
 module load foss/2016a matlab/2018b

@@ -1,0 +1,6 @@
+strPath =
+
+sDir = dir()
+
+sSimRun = rmfield(sSimRun,{'cellSpikeTimesLGN_ON','cellSpikeTimesLGN_OFF'});
+		save(strDataFile,'sSimRun','sParams','-v7');
