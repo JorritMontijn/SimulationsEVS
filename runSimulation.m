@@ -225,6 +225,7 @@ function [sData,sSimRun] = runSimulation(strInput)
 	if ispc
 		strDataFile = [strOutputDir 'xMaster_'  strTag sStimParams.strStimType sprintf('_%03d_%d_%s.mat',intSeed,intState,getDate)];
 		printf(' .. Saving data to <%s>... [%s]\n',strDataFile,getTime);
+		sParams = rmfield(sParams,{'sConnectivity'});
 		save(strDataFile,'sSimRun','sParams','-v7.3');
 	else
 		strDataFile = [strOutputDir 'Simulation_' strTag sStimParams.strStimType sprintf('_%03d_%d_%s.mat',intSeed,intState,getDate)];

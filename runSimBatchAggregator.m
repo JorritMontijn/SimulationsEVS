@@ -12,8 +12,8 @@
 
 %% define directories
 clearvars;
-strSourceDir = 'C:\Code\SimulationsEVS\SimResults\';
-strTargetDir = 'D:\Data\SimAggregates\';
+strSourceDir = 'F:\Data\Results\SimResults\';
+strTargetDir = 'F:\Data\Results\SimAggregates\';
 
 %% settings
 boolIncludeLGN = false;

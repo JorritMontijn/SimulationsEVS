@@ -38,6 +38,7 @@ function sSimRun = remSimLastRep(sSimRun)
 	sSimRun.cellSpikeTimesCortex = cellSpikeTimes;
 	
 	%LGN ON
+	if isfield(sSimRun,'cellSpikeTimesLGN_ON')
 	cellSpikeTimes = sSimRun.cellSpikeTimesLGN_ON;
 	for i=1:numel(cellSpikeTimes)
 		vecSpikeTimes = cellSpikeTimes{i};
@@ -45,8 +46,10 @@ function sSimRun = remSimLastRep(sSimRun)
 		cellSpikeTimes{i} = vecSpikeTimes;
 	end
 	sSimRun.cellSpikeTimesLGN_ON = cellSpikeTimes;
+	end
 	
 	%LGN OFF
+	if isfield(sSimRun,'cellSpikeTimesLGN_OFF')
 	cellSpikeTimes = sSimRun.cellSpikeTimesLGN_OFF;
 	for i=1:numel(cellSpikeTimes)
 		vecSpikeTimes = cellSpikeTimes{i};
@@ -54,4 +57,5 @@ function sSimRun = remSimLastRep(sSimRun)
 		cellSpikeTimes{i} = vecSpikeTimes;
 	end
 	sSimRun.cellSpikeTimesLGN_OFF = cellSpikeTimes;
+	end
 end
