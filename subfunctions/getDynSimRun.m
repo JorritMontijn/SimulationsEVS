@@ -339,7 +339,7 @@ function sData = getDynSimRun(sData,dblMaxRunningTime,intWorker)
 		
 				%get stim drive
 				intStimType=[];
-				if strcmpi(sSP.strStimType,'SquareGrating'),intStimType=0;end
+				if strcmpi(sSP.strStimType,'SquareGrating'),intStimType=1;end %0: peter's direct method; 1: convolution-based
 				sStimDrive = getDynBottomUpInputs(sSP,intStimType);
 				
 				%assign

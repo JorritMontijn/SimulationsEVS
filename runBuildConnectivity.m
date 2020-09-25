@@ -32,7 +32,7 @@ sConnParams.vecConnsPerTypeOFF = 64*2*[36 24]; %[pyramid interneuron]
 
 sConnParams.dblSigmaX = 1.29; %length of gabor response
 sConnParams.dblSigmaY = 1.29; %width of gabor response
-dblScaleCorrection = 0.96;
+dblScaleCorrection = 0.94;%0.96
 sConnParams.vecConductance_FromLGN_ToCort = (1/(64*dblScaleCorrection))*[1.1 1.2]*0.24; %to [pyramid interneuron]
 sConnParams.vecMeanSynDelayFromLGN_ToCort = [10 5]/1000; %to [pyramid interneuron]
 sConnParams.vecSDSynDelayFromLGN_ToCort = [7 3]/1000; %to [pyramid interneuron]
@@ -55,8 +55,8 @@ sConnParams.matConnCortFromTo(1,:) = [40 40]*dblScalingFactor; %from pyramid to 
 sConnParams.matConnCortFromTo(2,:) = [30 30]*dblScalingFactor; %from interneuron to [pyr inter]
 
 %conductances
-sConnParams.matConductancesFromTo(1,:) = 1*[0.96 1.28]/dblScalingFactor; %from pyramid to [pyr inter]
-sConnParams.matConductancesFromTo(2,:) = 1*[1.50 1.00]/dblScalingFactor; %from inter to [pyr inter]
+sConnParams.matConductancesFromTo(1,:) = 0.1*[0.96 1.28]/dblScalingFactor; %from pyramid to [pyr inter]
+sConnParams.matConductancesFromTo(2,:) = 0.1*[1.50 1.00]/dblScalingFactor; %from inter to [pyr inter]
 
 %synaptic delays
 sConnParams.dblDelayMeanCortToCort = 3/1000; %in ms
@@ -92,7 +92,7 @@ sConnectivity = buildConnectivity(sConnParams);
 
 %% save
 if sConnParams.boolUseRFs && sConnParams.boolUseSFs && ~sConnParams.boolUseWeights
-	strConnFile = sprintf('sConnSimil2_Ret%dCol%dN%dS%d_%s.mat',...
+	strConnFile = sprintf('sConnSimilX_Ret%dCol%dN%dS%d_%s.mat',...
 		sConnParams.vecSizeInput(1),sConnParams.intColumns,sConnectivity.intCortexCells,...
 		numel(sConnectivity.vecSynExcInh),getDate);
 else

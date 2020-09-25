@@ -1,10 +1,10 @@
 clear all;close all;clc;
-strConnNew = 'Conn256N1200_2020-07-16.mat'; %new
+strConnNew = 'Conn256N1200_2020-09-18'; %new
 dblNoise = 0;
 strStimNew = sprintf('Ret256Noise%.1fOri5_x2R1_2020-07-17.mat',dblNoise); %new
 
 
-strInput = ['time=0,conn=' strConnNew...
+strInput = ['time=2,conn=' strConnNew...
 	',stim=' strStimNew...
 	',idx=0,tag=Ori2Noise' num2str(dblNoise)];
 [sData,sSimRun]=runSimulation(strInput);
