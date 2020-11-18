@@ -359,6 +359,9 @@ function sConnectivity = buildConnectivity(sConnParams)
 			vecSims(intNeuron) = 0; %remove the neuron itself
 			vecConnProb = vecSims/sum(vecSims);
 			vecProbCumSum = cumsum(vecConnProb);
+			vecWeights = vecConnProb;
+			vecWeights = (log(nthroot(vecWeights,3)+1)+1);
+			vecWeights = vecWeights ./ std(vecWeights);
 			
 			%get assignment vectors
 			vecConnsAssign = intC:(intC+intConnsFromThisType-1);
@@ -401,8 +404,12 @@ function sConnectivity = buildConnectivity(sConnParams)
 			%hist(vecConns)
 			
 			%% assign to connection matrix
-			vecTheseWeights = vecConnProb(vecConns);
-			vecTheseWeights = (vecTheseWeights./mean(vecTheseWeights));
+			vecTheseWeights = vecWeights(vecConns);
+			vecTheseWeights = vecTheseWeights-min(vecTheseWeights);
+			vecTheseWeights = log(vecTheseWeights+1.001);
+			vecTheseWeights = vecTheseWeights ./ mean(vecTheseWeights);
+			vecTheseWeights = sqrt(vecTheseWeights);
+			vecTheseWeights = vecTheseWeights ./ mean(vecTheseWeights);
 			dblG = matConductancesFromTo(intSourceCellType,intTargetCellType);
 			matSynV1FromTo(vecConnsAssign,:) = [vecConns' repmat(intNeuron,[length(vecConns) 1])]; %[From x To]
 			vecSynV1Conductance(vecConnsAssign) = dblG;

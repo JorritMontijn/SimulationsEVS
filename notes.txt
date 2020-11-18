@@ -1,9 +1,93 @@
-module load foss/2016a matlab/2016b
-mcc -m -v -R '-nojvm, -nodisplay' -o DynSimCompiledIndInp runDynSimCompiledIndInp.m -I /home/montijn/Code/ -I /home/montijn/Code/general/ -I /home/montijn/Code/general/classics/
+module load foss/2016a matlab/2018b
+mcc -m -v -R '-nojvm, -nodisplay' -o SimCompiled runSimulation.m -I /home/users/m/montijn/SimulationsEVS/Code/ -I /home/users/m/montijn/SimulationsEVS/Code/subfunctions/ -I /home/users/m/montijn/SimulationsEVS/Code/general/ -I /home/users/m/montijn/SimulationsEVS/Code/classics/
 
 
-for i in {1..400}
+for i in {1..200}
 do
-    sbatch runC2IndepRetOri2Noise0.slurm $i
+    sbatch runOri5Noise0.2.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise0.4.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise0.6.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise0.8.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise1.0.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise1.2.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise1.4.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise1.6.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise1.8.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise2.0.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise2.2.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise2.4.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise2.6.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise2.8.slurm $i
+done
+
+
+for i in {1..200}
+do
+    sbatch runOri5Noise3.0.slurm $i
 done
 

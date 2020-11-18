@@ -5,20 +5,13 @@
 %	[sData,sSimRun] = runSimulationIndInp(strInput)
 %
 %This function uses string-based inputs with parameter delimited by commas
-%so compiled versions can also be started from the command line. The
-%difference between runSimulation() runSimulationIndInp() is that the
-%former will simulate a single retina, which means that shared noise will
-%propagate to cortex and induce information-limiting correlations. If you
-%want to remove this source of shared fluctuations, you will have to use
-%runSimulationIndInp() instead. The drawback is that simulating independent
-%inputs for all V1 cells is computationally intensive, so it will
-%noticeably slow down the simulation speed. 
+%so compiled versions can also be started from the command line.
 %
 %Input syntax is a comma-delimited string of: [parameter=value,]
 %Example: runSimulationIndInp time=0-12:00:00,conn=Connectivity.mat,... etc
 %
 %Inputs are 
-%<parameter> (required/optional) [Value-syntax]	Description
+%<param> (req/opt)	[Value-syntax]	Description:
 %- time		(req)	[D-HH:MM:SS]	First format for requested running time
 %									in days, hours, minutes, and seconds
 %			(req)	[integer]		Second format for time, requesting
@@ -225,7 +218,7 @@ function [sData,sSimRun] = runSimulation(strInput)
 	if ispc
 		strDataFile = [strOutputDir 'xMaster_'  strTag sStimParams.strStimType sprintf('_%03d_%d_%s.mat',intSeed,intState,getDate)];
 		printf(' .. Saving data to <%s>... [%s]\n',strDataFile,getTime);
-		sParams = rmfield(sParams,{'sConnectivity'});
+		%sParams = rmfield(sParams,{'sConnectivity'});
 		save(strDataFile,'sSimRun','sParams','-v7.3');
 	else
 		strDataFile = [strOutputDir 'Simulation_' strTag sStimParams.strStimType sprintf('_%03d_%d_%s.mat',intSeed,intState,getDate)];

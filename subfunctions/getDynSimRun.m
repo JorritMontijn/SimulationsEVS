@@ -115,7 +115,7 @@ function sData = getDynSimRun(sData,dblMaxRunningTime,intWorker)
 	vecSpikeCounterPreAllocatedLGN_ON = vecSpikeCounterLGN_ON;
 	vecSpikeCounterPreAllocatedLGN_OFF = vecSpikeCounterLGN_OFF;
 	vecSpikeCounterPreAllocatedCortex = vecSpikeCounterCortex;
-	vecCortTauSyn = vecTauPeakByType(vecSynExcInh);
+	vecCortTauSyn = vecTauPeakByType(vecSynExcInh);%was vecSynExcInh [2020-10-8]; was vecSynExcInh [2020-10-19]
 	
 	%synapse function
 	fPSP = @(dblT,vecSpikeTimes,dblTauPeak) sum(max(0,dblT - vecSpikeTimes).*(1/dblTauPeak).*exp(1-(dblT - vecSpikeTimes)/dblTauPeak));
@@ -127,6 +127,7 @@ function sData = getDynSimRun(sData,dblMaxRunningTime,intWorker)
 		cellSynTargets{intNeuron} = find(matSynFromTo(:,1) == intNeuron);
 	end
 	
+	%% this takes very long...
 	%create synaptic target cell array for LGN
 	intCellsLGN = numel(cellSpikeTimesLGN_ON);
 	cellSynTargetsLGN_ON = cell(1,intCellsLGN);

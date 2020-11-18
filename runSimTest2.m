@@ -1,10 +1,10 @@
-clear all;close all;clc;
-strConnNew = 'Conn256N1200_2020-09-18'; %new
+clear all;clc;%close all;clc;
+strConnNew = 'Conn256N1200_2020-10-29'; %new
 dblNoise = 0;
 strStimNew = sprintf('Ret256Noise%.1fOri5_x2R1_2020-07-17.mat',dblNoise); %new
 
 
-strInput = ['time=2,conn=' strConnNew...
+strInput = ['time=1,conn=' strConnNew...
 	',stim=' strStimNew...
 	',idx=0,tag=Ori2Noise' num2str(dblNoise)];
 [sData,sSimRun]=runSimulation(strInput);
@@ -29,4 +29,21 @@ Elapsed: 81.0s; now at t=0.881s; mean rate (Hz): 5.258 (V1 Pyr); 15.645 (V1 Int)
 Elapsed: 86.0s; now at t=0.938s; mean rate (Hz): 5.331 (V1 Pyr); 15.832 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [14:15:13]
 Elapsed: 91.0s; now at t=0.993s; mean rate (Hz): 5.404 (V1 Pyr); 15.958 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [14:15:18]
 Elapsed: 96.0s; now at t=1.046s; mean rate (Hz): 5.381 (V1 Pyr); 15.886 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [14:15:23]
+
+
+%0.94
+Elapsed: 1488.6s; now at t=0.301s; mean rate (Hz): 2.536 (V1 Pyr); 0.650 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [11:51:32]
+
+%Conn256N1200_2020-10-07.mat:
+%Elapsed: 1135.7s; now at t=0.202s; mean rate (Hz): 1.639 (V1 Pyr); 0.889 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [14:01:13]
+
+%Conn256N1200_2020-10-26.mat:
+%Elapsed: 1094.4s; now at t=0.397s; mean rate (Hz): 6.533 (V1 Pyr); 4.828 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [12:28:46]
+
+%Conn256N1200_2020-10-28.mat:
+%Elapsed: 1096.1s; now at t=0.398s; mean rate (Hz): 5.883 (V1 Pyr); 5.115 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [12:10:01]
+
+%Conn256N1200_2020-10-29.mat:
+%Elapsed: 1112.5s; now at t=0.399s; mean rate (Hz): 5.725 (V1 Pyr); 4.887 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [11:45:44]
+
 %}

@@ -1,8 +1,8 @@
 %% load data
-strConnOld = 'sConnSimil2_Ret32Col60N1200S336000_2018-07-19.mat'; %old
-strConnNew = 'sConnSimil2_Ret256Col48N1200S336000_2020-07-16.mat'; %new
-strStimOld = 'sStim2_SquareGratingExpRet32Noise2Ori5Drift2_x2R1_2018-08-08.mat'; %old
-strStimNew = 'sStim2_SquareGratingExpRet256Noise5Ori5Drift2_x2R1_2020-07-09.mat'; %new
+strConnOld = 'Conn256N1200_2020-10-07.mat'; %old
+strConnNew = 'Conn256N1200_2020-10-26.mat'; %new
+strStimOld = 'Ret256Noise0.0Ori5_x2R1_2020-07-17.mat'; %old
+strStimNew = 'Ret256Noise0.0Ori5_x2R1_2020-07-17.mat'; %new
 load(['F:\Code\Simulations\SimulationsEVS\Connectivity\' strConnNew ]);
 load(['F:\Code\Simulations\SimulationsEVS\Stimulation\' strStimNew]);
 
