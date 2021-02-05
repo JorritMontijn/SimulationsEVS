@@ -62,8 +62,8 @@ function sConnectivity = buildConnectivity(sConnParams)
 	vecConnsPerTypeON = sConnParams.vecConnsPerTypeON; %[pyramid interneuron]
 	vecConnsPerTypeOFF = sConnParams.vecConnsPerTypeOFF; %[pyramid interneuron]
 	
-	dblSigmaX = sConnParams.dblSigmaX; %length of gabor response
-	dblSigmaY = sConnParams.dblSigmaY; %width of gabor response
+	dblSigmaW = sConnParams.dblSigmaW; %width of gabor response
+	dblSigmaL = sConnParams.dblSigmaL; %length of gabor response
 	intCellsV1 = length(vecCellTypesV1);
 	vecCellAreaV1 = ones(1,intCellsV1); %1, V1; 2, V2
 	vecPrefPsiV1 = 2*pi*rand(1,intCellsV1);%phase offset
@@ -112,14 +112,12 @@ function sConnectivity = buildConnectivity(sConnParams)
 		%	for dblPsi=[pi*(0:0.1:2)]
 		% get rotation matrices
 		dblTheta=dblThetaRot;
-		%matX_theta=(matMeshX*cos(dblTheta)+matMeshY*sin(dblTheta))+dblPrefRF_X;
-		%matY_theta=(-matMeshX*sin(dblTheta)+matMeshY*cos(dblTheta))+dblPrefRF_Y;
-		
+		%transform width/length
+		dblLength = dblSigmaL/dblSigmaW;
+
 		%get gabor
-		%matG_rot = exp(-.5*(((matX_theta.^2)/(dblSigmaX^2))+((matY_theta.^2)/(dblSigmaY^2)))).*cos(2*pi*dblPrefSF*matX_theta+dblPsi);
-		%matG_rot = imrotate(matG,rad2ang(dblThetaRot),'bilinear','crop');
-		matG_rot = exp((-0.5*(((matMeshX - dblPrefRF_X).^2)/(dblSigmaX^2) + ((matMeshY - dblPrefRF_Y).^2)/(dblSigmaY^2)))).*...
-			cos(2*pi*dblPrefSF*((matMeshX - dblPrefRF_X)*cos(dblTheta)+(matMeshY - dblPrefRF_Y)*sin(dblTheta)+dblPsi));
+		matG_rot = getGabor(matMeshX,matMeshY,dblPrefRF_X,dblPrefRF_Y,dblSigmaW,dblLength,dblTheta,dblPrefSF,dblPsi);
+		
 		if rand(1) < -0.01
 		figure,imagesc(matG_rot)
 		title(sprintf('Ori %.1f, SF %.1f, Phase %.3f',dblTheta,dblPrefSF,dblPsi));
@@ -964,8 +962,8 @@ function sConnectivity = buildConnectivity(sConnParams)
 	sConnectivity.vecPrefSF = vecPrefSF;
 	sConnectivity.vecPrefRF_X = vecPrefRF_X;
 	sConnectivity.vecPrefRF_Y = vecPrefRF_Y;
-	sConnectivity.dblSigmaX = dblSigmaX; %length of gabor response
-	sConnectivity.dblSigmaY = dblSigmaY; %width of gabor response
+	sConnectivity.dblSigmaW = dblSigmaW; %width of gabor response
+	sConnectivity.dblSigmaL = dblSigmaL; %length of gabor response
 	sConnectivity.matPrefGabors = matPrefGabors;
 	sConnectivity.matFieldsV2 = matFieldsV2;
 	sConnectivity.matExemplarFieldsV2 = matExemplarFieldsV2;

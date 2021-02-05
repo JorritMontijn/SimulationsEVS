@@ -14,11 +14,12 @@
 clearvars;
 strSourceDir = 'F:\Data\Results\SimResults\';
 strTargetDir = 'F:\Data\Results\SimAggregates\';
-vecNoise = 0.6:0.2:3;
+vecNoise = 0.2:0.2:3;
 
 for dblNoise=vecNoise
 	%% clear data and find files
 	clearvars -except strSourceDir strTargetDir vecNoise dblNoise;
+	%strFileString = '*';%['*Ori5Noise'  sprintf('%02d',round(dblNoise*10)) 'Square*'];
 	strFileString = ['*Ori5Noise'  sprintf('%02d',round(dblNoise*10)) 'Square*'];
 	
 	%% settings
@@ -216,7 +217,7 @@ for dblNoise=vecNoise
 	%% save data
 	%strOutputFile = sprintf('Simulation_xAreaDistributed_%d_%s.mat',sum(cat(2,cast(getDate,'double')*1000,cast(getTime,'double'))),getDate);
 	%strOutputFile = sprintf('Simulation_xAreaDistributed_LargeRetNoise%02d_%s.mat',sData.vecOrientationNoise(1)*10,getDate);
-	strOutputFile = sprintf('Simulation_xAreaDistributed_LargeRetNoise%02d_%s',dblNoise*10,getDate);
+	strOutputFile = sprintf('Simulation_xAreaDistributed_LargeRetNoise%02d_%s',round(dblNoise*10),getDate);
 	
 	save([strTargetDir strOutputFile],'-struct','sData','-v7.3');
 	%savefast([strTargetDir strOutputFile],'-struct','sData','-v7.3');
@@ -230,5 +231,5 @@ for dblNoise=vecNoise
 		[status,message,messageid] = movefile([strSourceDir strFile],[strSourceDir 'Processed' filesep strFile]);
 	end
 	
-	fprintf('Noise%02d aggregation complete, saved data to <%s%s> [%s]\n',dblNoise*10,strTargetDir,strOutputFile,getTime);
+	fprintf('Noise%02d aggregation complete, saved data to <%s%s> [%s]\n',round(dblNoise*10),strTargetDir,strOutputFile,getTime);
 end

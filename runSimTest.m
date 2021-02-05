@@ -1,26 +1,65 @@
 %% load data
-strConnOld = 'Conn256N1200_2020-10-07.mat'; %old
-strConnNew = 'Conn256N1200_2020-10-26.mat'; %new
+strConnOld = 'Conn256N1200_2020-10-29.mat'; %old
+strConnNew = strConnOld; %new
+%strConnNew = 'Conn256N1200_2021-01-08.mat'; %new
 strStimOld = 'Ret256Noise0.0Ori5_x2R1_2020-07-17.mat'; %old
 strStimNew = 'Ret256Noise0.0Ori5_x2R1_2020-07-17.mat'; %new
 load(['F:\Code\Simulations\SimulationsEVS\Connectivity\' strConnNew ]);
 load(['F:\Code\Simulations\SimulationsEVS\Stimulation\' strStimNew]);
 
 %% plot response of example cell
-intNeuron=25;
+intNeuron=320;
 dblPrefSF = sConnectivity.vecPrefSF(intNeuron);
+matGrid = zeros(sConnParams.vecSizeInput);
+%add off
 indSyn = sConnectivity.matSynConnOFF_to_Cort(:,2)==intNeuron;
 vecSourceOff = sConnectivity.matSynConnOFF_to_Cort(indSyn,1);
 vecW = sConnectivity.vecSynWeightOFF_to_Cort(indSyn);
 vecC = sConnectivity.vecSynConductanceOFF_to_Cort(indSyn);
-matGrid = zeros(sConnParams.vecSizeInput);
 [vecRow,vecCol]=ind2sub(sConnParams.vecSizeInput,vecSourceOff);
-matGrid = getFillGrid(matGrid,vecRow,vecCol,vecC);
+matGridOff = getFillGrid(matGrid,vecRow,vecCol,vecC);
+%add on
+indSyn = sConnectivity.matSynConnON_to_Cort(:,2)==intNeuron;
+vecSourceON = sConnectivity.matSynConnON_to_Cort(indSyn,1);
+vecW = sConnectivity.vecSynWeightON_to_Cort(indSyn);
+vecC = sConnectivity.vecSynConductanceON_to_Cort(indSyn);
+[vecRow,vecCol]=ind2sub(sConnParams.vecSizeInput,vecSourceON);
+matGridOn = getFillGrid(matGrid,vecRow,vecCol,-vecC);
+
+%% plot
+intImX = sConnParams.vecSizeInput(1);
+intImY = sConnParams.vecSizeInput(2);
+dblVisSpacing = sConnParams.dblVisSpacing;
+vecSpaceX = dblVisSpacing*((-(intImX - 1)/2):(intImX - 1)/2);
+vecSpaceY = dblVisSpacing*((-(intImY - 1)/2):(intImY - 1)/2);
+	
 figure
-imagesc(matGrid)
+imagesc(vecSpaceX,vecSpaceY,(matGridOn + matGridOff))
+axis xy
+daspect([1 1 1])
 colorbar
-title(sprintf('Sum: %e',sum(matGrid(:))))
+dblPrefOri = sConnectivity.vecPrefOri(intNeuron);
+dblPrefSF = sConnectivity.vecPrefSF(intNeuron);
+dblPrefRF_X = sConnectivity.vecPrefRF_X(intNeuron);
+dblPrefRF_Y = sConnectivity.vecPrefRF_Y(intNeuron);
+dblPrefPsi = sConnectivity.vecPrefPsi(intNeuron);
+
+title(sprintf('N%d: %s=%d; %s=%.3f; x=%.3f; y=%.3f, %s=%.3f',intNeuron,...
+	getGreek('theta'),rad2deg(dblPrefOri),...
+	getGreek('xi'),dblPrefSF,...
+	dblPrefRF_X,...
+	dblPrefRF_Y,...
+	getGreek('psi'),dblPrefPsi));
+xlabel('Azimuth visual space (degs)');
+ylabel('Elevation visual space (degs)');
+fixfig;
+grid off;
+
 return
+%% export
+export_fig(sprintf('C%s_ExampleN%d.tif',strConnNew(14:(end-4)),intNeuron));
+export_fig(sprintf('C%s_ExampleN%d.pdf',strConnNew(14:(end-4)),intNeuron));
+
 %% test
 
 tic

@@ -30,8 +30,8 @@ sConnParams.boolUseSFs = true;
 sConnParams.vecConnsPerTypeON = [2880 1920]; %[pyramid interneuron]
 sConnParams.vecConnsPerTypeOFF = [2880 1920]; %[pyramid interneuron]
 
-sConnParams.dblSigmaX = 1.29; %length of gabor response
-sConnParams.dblSigmaY = 1.29; %width of gabor response
+sConnParams.dblSigmaW = 0.8;%1.29; %width of gabor response
+sConnParams.dblSigmaL = sConnParams.dblSigmaW/5;%1.29; %length of gabor response
 sConnParams.vecConductance_FromLGN_ToCort = [7.1 8.3]*(10^-3); %to [pyramid interneuron]
 sConnParams.vecMeanSynDelayFromLGN_ToCort = [10 5]/1000; %to [pyramid interneuron]
 sConnParams.vecSDSynDelayFromLGN_ToCort = [7 3]/1000; %to [pyramid interneuron]
@@ -102,6 +102,9 @@ else
 		sConnParams.intColumns,sConnectivity.intCortexCells,numel(sConnectivity.vecSynExcInh),...
 		sConnParams.boolUseWeights,sConnParams.boolUseRFs,sConnParams.boolUseSFs,getDate);
 end
+strConnFile = sprintf('Conn%dN%d_%s.mat',...
+		sConnParams.vecSizeInput(1),sConnectivity.intCortexCells,getDate);
+	
 strConnDir = 'F:\Code\Simulations\SimulationsEVS\Connectivity\';
 
 fprintf('Saving file [%s] to [%s]... [%s]\n',strConnFile,strConnDir,getTime);
