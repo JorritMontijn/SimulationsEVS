@@ -32,7 +32,7 @@ sConnParams.vecConnsPerTypeOFF = [2880 1920]; %[pyramid interneuron]
 
 sConnParams.dblSigmaW = 0.8;%1.29; %width of gabor response
 sConnParams.dblSigmaL = sConnParams.dblSigmaW/5;%1.29; %length of gabor response
-sConnParams.vecConductance_FromLGN_ToCort = [7.1 8.3]*(10^-3); %to [pyramid interneuron]
+sConnParams.vecConductance_FromLGN_ToCort = [6.9 8.15]*(10^-3);%[7.1 8.3]*(10^-3); %to [pyramid interneuron]
 sConnParams.vecMeanSynDelayFromLGN_ToCort = [10 5]/1000; %to [pyramid interneuron]
 sConnParams.vecSDSynDelayFromLGN_ToCort = [7 3]/1000; %to [pyramid interneuron]
 
@@ -55,9 +55,9 @@ sConnParams.matConnCortFromTo(1,:) = [40 40]*dblScalingFactor; %from pyramid to 
 sConnParams.matConnCortFromTo(2,:) = [30 30]*dblScalingFactor; %from interneuron to [pyr inter]
 
 %conductances
-dblRescaleConductances = 0.5;
+dblRescaleConductances = 0.45;
 sConnParams.matConductancesFromTo(1,:) = dblRescaleConductances*((0.006*[0.96 1.28])/dblScalingFactor); %from pyramid to [pyr inter]
-sConnParams.matConductancesFromTo(2,:) = dblRescaleConductances*((0.006*[3.00 2.00])/dblScalingFactor); %from inter to [pyr inter]
+sConnParams.matConductancesFromTo(2,:) = dblRescaleConductances*((0.006*[3.00 1.50])/dblScalingFactor); %from inter to [pyr inter]
 
 %synaptic delays
 sConnParams.dblDelayMeanCortToCort = 3/1000; %in ms

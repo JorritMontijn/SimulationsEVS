@@ -14,12 +14,12 @@
 clearvars;
 strSourceDir = 'F:\Data\Results\SimResults\';
 strTargetDir = 'F:\Data\Results\SimAggregates\';
-vecNoise = 0.2:0.2:3;
+vecNoise = 0:0.2:3;
 
 for dblNoise=vecNoise
 	%% clear data and find files
 	clearvars -except strSourceDir strTargetDir vecNoise dblNoise;
-	%strFileString = '*';%['*Ori5Noise'  sprintf('%02d',round(dblNoise*10)) 'Square*'];
+	strFileString = '*';%['*Ori5Noise'  sprintf('%02d',round(dblNoise*10)) 'Square*'];
 	strFileString = ['*Ori5Noise'  sprintf('%02d',round(dblNoise*10)) 'Square*'];
 	
 	%% settings

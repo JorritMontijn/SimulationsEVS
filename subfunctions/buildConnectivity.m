@@ -278,20 +278,47 @@ function sConnectivity = buildConnectivity(sConnParams)
 	%msg
 	fprintf(' .. Created LIF model parameters [%s]\n',getTime);
 	
-	%% calculate similarity between receptive fields of V1 cells
+	%% calculate similarity between receptive fields of V1 cells, v1
 	fprintf(' .. Building V1 field similarities for %dx%d cells... [%s]\n',intCellsV1,intCellsV1,getTime);
+	%{
 	matTuningSimilarity=nan(intCellsV1,intCellsV1);
 	parfor i1=1:intCellsV1
-		a = matPrefGabors(:,:,i1);
+		a = abs(matPrefGabors(:,:,i1));
 		a = a - (sum(a(:),'double') / numel(a));
 		for i2=1:intCellsV1
-			b = matPrefGabors(:,:,i2); %#ok<PFBNS>
+			b = abs(matPrefGabors(:,:,i2)); %#ok<PFBNS>
 			b = b - (sum(b(:),'double') / numel(b));
 			r = sum(sum(a.*b))/sqrt(sum(sum(a.*a))*sum(sum(b.*b)));
 			matTuningSimilarity(i1,i2) = r;
 		end
 	end
 	matTuningSimilarity(diag(diag(true(intCellsV1)))) = 0;
+	%}
+	%% calculate similarity between receptive fields of V1 cells, v2
+	if range(vecPrefOriV1) <= pi
+		vecUsePrefOri = vecPrefOriV1*2;
+	else
+		vecUsePrefOri = vecPrefOriV1;
+	end
+	vecUsePrefSF = vecPrefSFV1;
+	vecUsePrefX = vecPrefRF_X_V1;
+	vecUsePrefY = vecPrefRF_Y_V1;
+	
+	
+	matD_SF = abs(log(vecUsePrefSF)-log(vecUsePrefSF'));
+	%matD_SF = matD_SF + mean(matD_SF(:));
+	matD_SF = matD_SF./max(matD_SF(:));
+	matD_Loc = sqrt((vecUsePrefX-vecUsePrefX').^2 + (vecUsePrefY-vecUsePrefY').^2);
+	%matD_Loc = matD_Loc + median(matD_Loc(:));
+	matD_Loc = matD_Loc./max(matD_Loc(:));
+	matD_Ori = nan(intCellsV1,intCellsV1);
+	for intN=1:intCellsV1
+		matD_Ori(intN,:) = abs(circ_dist(vecUsePrefOri,vecUsePrefOri(intN)));
+	end
+	matD_Ori = matD_Ori./max(matD_Ori(:));
+	matTuningSimilarity = (1 - matD_Ori).*(1 - matD_Loc).*(1 - matD_SF);
+	matTuningSimilarity(diag(diag(true(intCellsV1)))) = 0;
+	%figure,imagesc(matTuningSimilarity);colorbar
 	
 	%% create cortical connectivity and parameter vectors
 	%locality of connection probability between cells for different types
@@ -965,6 +992,7 @@ function sConnectivity = buildConnectivity(sConnParams)
 	sConnectivity.dblSigmaW = dblSigmaW; %width of gabor response
 	sConnectivity.dblSigmaL = dblSigmaL; %length of gabor response
 	sConnectivity.matPrefGabors = matPrefGabors;
+	sConnectivity.matTuningSimilarity = matTuningSimilarity;
 	sConnectivity.matFieldsV2 = matFieldsV2;
 	sConnectivity.matExemplarFieldsV2 = matExemplarFieldsV2;
 	%end

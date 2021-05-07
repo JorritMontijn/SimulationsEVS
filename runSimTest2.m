@@ -1,5 +1,5 @@
 clear all;clc;%close all;clc;
-strConnNew = 'Conn256N1200_2020-10-29'; %new
+strConnNew = 'Conn256N1200_2021-03-24'; %new
 dblNoise = 0;
 strStimNew = sprintf('Ret256Noise%.1fOri5_x2R1_2020-07-17.mat',dblNoise); %new
 
@@ -45,5 +45,9 @@ Elapsed: 1488.6s; now at t=0.301s; mean rate (Hz): 2.536 (V1 Pyr); 0.650 (V1 Int
 
 %Conn256N1200_2020-10-29.mat:
 %Elapsed: 1112.5s; now at t=0.399s; mean rate (Hz): 5.725 (V1 Pyr); 4.887 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [11:45:44]
+
+strConnNew = 'Conn256N1200_2021-03-22'; %new
+Elapsed: 1458.4s; now at t=0.663s; mean rate (Hz): 7.040 (V1 Pyr); 7.296 (V1 Int); NaN (V2 Pyr); NaN (V2 Int) [19:40:02]
+
 
 %}
