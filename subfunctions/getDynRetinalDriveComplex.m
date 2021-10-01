@@ -26,20 +26,20 @@ function [matR_ON,matR_OFF,dblVisSpacingImage,vecLuminance] = getDynRetinalDrive
 	%% run
 	%get default values
 	if ~exist('sP','var'),sP=struct;end
-	if ~isfield(sP,'dblContrast'),dblContrast = 100;else dblContrast=sP.dblContrast;end
-	if ~isfield(sP,'dblLuminance'),dblLuminance = 100;else dblLuminance=sP.dblLuminance;end
-	if ~isfield(sP,'dblStepT'),dblStepT = 0.5;else dblStepT=sP.dblStepT;end
-	if ~isfield(sP,'dblVisSpacingImage'),dblVisSpacingImage = 0.2;else dblVisSpacingImage=sP.dblVisSpacingImage;end
-	if ~isfield(sP,'vecArraySize'),vecArraySize = [64 64];else vecArraySize=sP.vecArraySize;end
-	if ~isfield(sP,'dblVisSpacingCells'),dblVisSpacingCells = 0.2;else dblVisSpacingCells=sP.dblVisSpacingCells;end
-	if ~isfield(sP,'dblDelayCS'),dblDelayCS = 3;else dblDelayCS=sP.dblDelayCS;end
-	if ~isfield(sP,'dblSigmaCenter'),dblSigmaCenter = 0.176;else dblSigmaCenter=sP.dblSigmaCenter;end
-	if ~isfield(sP,'dblSigmaSurround'),dblSigmaSurround = 0.53;else dblSigmaSurround=sP.dblSigmaSurround;end
-	if ~isfield(sP,'dblK_center'),dblK_center = 17;else dblK_center=sP.dblK_center;end
-	if ~isfield(sP,'dblK_surround'),dblK_surround = 16;else dblK_surround=sP.dblK_surround;end
-	if ~isfield(sP,'dblTauCenter'),dblTauCenter = 10;else dblTauCenter=sP.dblTauCenter;end
-	if ~isfield(sP,'dblTauSurround'),dblTauSurround = 20;else dblTauSurround=sP.dblTauSurround;end
-	if ~isfield(sP,'dblR_baseline'),dblR_baseline = 15;else dblR_baseline=sP.dblR_baseline;end
+	if ~isfield(sP,'dblContrast'),dblContrast = 100;else,dblContrast=sP.dblContrast;end
+	if ~isfield(sP,'dblLuminance'),dblLuminance = 100;else,dblLuminance=sP.dblLuminance;end
+	if ~isfield(sP,'dblStepT'),dblStepT = 0.5;else,dblStepT=sP.dblStepT;end
+	if ~isfield(sP,'dblVisSpacingImage'),dblVisSpacingImage = 0.2;else,dblVisSpacingImage=sP.dblVisSpacingImage;end
+	if ~isfield(sP,'vecArraySize'),vecArraySize = [64 64];else,vecArraySize=sP.vecArraySize;end
+	if ~isfield(sP,'dblVisSpacingCells'),dblVisSpacingCells = 0.2;else,dblVisSpacingCells=sP.dblVisSpacingCells;end
+	if ~isfield(sP,'dblDelayCS'),dblDelayCS = 3;else,dblDelayCS=sP.dblDelayCS;end
+	if ~isfield(sP,'dblSigmaCenter'),dblSigmaCenter = 0.176;else,dblSigmaCenter=sP.dblSigmaCenter;end
+	if ~isfield(sP,'dblSigmaSurround'),dblSigmaSurround = 0.53;else,dblSigmaSurround=sP.dblSigmaSurround;end
+	if ~isfield(sP,'dblK_center'),dblK_center = 17;else,dblK_center=sP.dblK_center;end
+	if ~isfield(sP,'dblK_surround'),dblK_surround = 16;else,dblK_surround=sP.dblK_surround;end
+	if ~isfield(sP,'dblTauCenter'),dblTauCenter = 10;else,dblTauCenter=sP.dblTauCenter;end
+	if ~isfield(sP,'dblTauSurround'),dblTauSurround = 20;else,dblTauSurround=sP.dblTauSurround;end
+	if ~isfield(sP,'dblR_baseline'),dblR_baseline = 15;else,dblR_baseline=sP.dblR_baseline;end
 	
 	%resize input image
 	if dblVisSpacingImage ~= dblVisSpacingCells
